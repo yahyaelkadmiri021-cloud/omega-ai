@@ -125,7 +125,7 @@ async function refresh() {
       'OMEGA AI v' + st.version + ' · النواة: ' + (st.core.supervisor_importable ? 'مستوردة ✓' : 'تحتاج مفتاح OpenRouter') +
       ' · الوكلاء: ' + st.agents.length + ' · الذاكرة: ' + st.core.memory_records + ' سجل · المشاريع: ' + st.core.projects.length;
     document.getElementById('stats-body').innerHTML =
-      '<table><tr><td>الوكلاء</td><td>' + st.agents.length + '</td></tr><tr><td>سجلات الذاكرة</td><td>' + st.core.memory_records + '</td></tr><tr><td>مشاريع نشطة</td><td>' + st.core.projects.length + '</td></tr><tr><td>مساحة القرص الحرة (df)</td><td>' + (st.core.disk_free_gb || '?') + ' GB' + (API_BASE ? ' (المستضاف — القرص مؤقت)' : ' — لكن حصة btrfs المتاحة ~54MB (العائق لتثبيت Electron)') + '</td></tr></table>';
+      '<table><tr><td>الوكلاء</td><td>' + st.agents.length + '</td></tr><tr><td>سجلات الذاكرة</td><td>' + st.core.memory_records + '</td></tr><tr><td>مشاريع نشطة</td><td>' + st.core.projects.length + '</td></tr><tr><td>مساحة القرص الحرة (df)</td><td>' + (st.core.disk_free_gb || '?') + ' GB' + (API_BASE ? ' (المستضاف — القرص مؤقت)' : ' — القرص المحلي تحرّر بعد مسح ~7GB') + '</td></tr></table>';
     document.getElementById('agents-body').innerHTML = st.agents.map(a =>
       '<div class="card"><h2>' + a.name_ar + ' <span class="muted">(' + a.name + ')</span></h2><p class="muted">' + a.role + '</p><span class="pill ' + (a.status === 'exists' ? 'ok' : a.status === 'missing' ? 'bad' : 'warn') + '">' + a.status + '</span></div>').join('');
     document.getElementById('projects-body').textContent = st.core.projects.length
