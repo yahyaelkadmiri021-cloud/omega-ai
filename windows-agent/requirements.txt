@@ -1,0 +1,6 @@
+# Windows agent dependencies (Windows only — PyAutoGUI does the real control)
+pyautogui
+Pillow
+# Pillow is REQUIRED for screenshots (pyscreeze needs it; pip did not
+# install it automatically on 2026-11-07, so it is listed explicitly).
+# No other dependencies: the HTTP layer is Python stdlib only (http.server).

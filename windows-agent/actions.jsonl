@@ -1,0 +1,10 @@
+{"time": "2026-11-07T19:11:03+00:00", "endpoint": "/status", "permission": "GREEN", "params": {}, "ok": true, "result": {"backend": "mock"}, "error": null}
+{"time": "2026-11-07T19:11:03+00:00", "endpoint": "/screenshot", "permission": "GREEN", "params": {}, "ok": true, "result": {"bytes": 838}, "error": null}
+{"time": "2026-11-07T19:11:03+00:00", "endpoint": "/mouse", "permission": "YELLOW", "params": {"action": "move", "x": 100, "y": 200}, "ok": true, "result": {"backend": "mock", "recorded": true, "action": "move"}, "error": null}
+{"time": "2026-11-07T19:11:03+00:00", "endpoint": "/keyboard", "permission": "YELLOW", "params": {"action": "type", "text": "hello"}, "ok": true, "result": {"backend": "mock", "recorded": true, "action": "type"}, "error": null}
+{"time": "2026-11-07T19:11:03+00:00", "endpoint": "/open-app", "permission": "YELLOW", "params": {"name": "notepad"}, "ok": true, "result": {"backend": "mock", "recorded": true, "name": "notepad"}, "error": null}
+{"time": "2026-11-07T19:11:03+00:00", "endpoint": "/shell", "permission": "RED", "params": {"command": "whoami", "shell": "powershell"}, "ok": false, "result": null, "error": "red-gate: approved:true required"}
+{"time": "2026-11-07T19:11:03+00:00", "endpoint": "/shell", "permission": "RED", "params": {"command": "whoami", "shell": "powershell", "approved": true}, "ok": true, "result": {"backend": "mock", "executed": false, "recorded": true, "command": "whoami", "shell": "powershell", "note": "Mock backend: command recorded, NOT executed."}, "error": null}
+{"time": "2026-11-07T19:11:03+00:00", "endpoint": "/log", "permission": "GREEN", "params": {"limit": 20}, "ok": true, "result": {"returned": 7}, "error": null}
+{"time": "2026-11-07T19:17:13+00:00", "endpoint": "/status", "permission": "GREEN", "params": {}, "ok": true, "result": {"backend": "mock"}, "error": null}
+{"time": "2026-11-07T19:17:13+00:00", "endpoint": "/shell", "permission": "RED", "params": {"command": "whoami", "shell": "powershell"}, "ok": false, "result": null, "error": "red-gate: approved:true required"}
