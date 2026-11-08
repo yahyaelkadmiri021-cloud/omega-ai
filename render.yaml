@@ -1,0 +1,18 @@
+# OMEGA AI — Render Blueprint (Free tier, $0)
+# Deploy: Render dashboard → New → Blueprint → connect the GitHub repo.
+# The repo root IS omega-ai/ (this file lives at its root).
+# No card needed for the Free plan. Never put .env / keys in the repo.
+services:
+  - type: web
+    name: omega-ai-bridge
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python3 bridge/omega_bridge.py
+    healthCheckPath: /status
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
+      # PORT is set automatically by Render — do not hardcode it.
+      - key: PYTHON_VERSION
+        value: 3.12.3

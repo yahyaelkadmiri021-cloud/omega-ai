@@ -1,0 +1,2 @@
+# OMEGA AI bridge — stdlib only. No third-party packages.
+# Kept so Render's Python build step has a file to install (zero deps).
