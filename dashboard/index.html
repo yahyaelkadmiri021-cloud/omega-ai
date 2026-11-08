@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OMEGA AI — لوحة التحكم</title>
+<style>
+  :root { --bg:#0b0f14; --panel:#121826; --panel2:#182034; --text:#e8edf5; --muted:#93a1b5; --accent:#38bdf8; --ok:#34d399; --warn:#fbbf24; --bad:#f87171; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:system-ui, "Segoe UI", Tahoma, sans-serif; }
+  header { display:flex; justify-content:space-between; align-items:center; padding:14px 20px; background:var(--panel); border-bottom:1px solid #1f2a44; }
+  header h1 { margin:0; font-size:20px; }
+  header .sub { color:var(--muted); font-size:12px; }
+  nav { display:flex; gap:6px; flex-wrap:wrap; padding:10px 20px; background:var(--panel); border-bottom:1px solid #1f2a44; }
+  nav button { background:var(--panel2); color:var(--text); border:1px solid #26314d; border-radius:8px; padding:8px 12px; cursor:pointer; }
+  nav button.active { background:var(--accent); color:#04121d; border-color:var(--accent); }
+  main { padding:20px; max-width:1100px; margin:0 auto; }
+  section { display:none; }
+  section.active { display:block; }
+  .card { background:var(--panel); border:1px solid #1f2a44; border-radius:12px; padding:16px; margin-bottom:14px; }
+  .card h2 { margin:0 0 8px; font-size:16px; }
+  .muted { color:var(--muted); font-size:13px; }
+  .pill { display:inline-block; padding:2px 10px; border-radius:999px; font-size:12px; }
+  .ok { background:#052e22; color:var(--ok); } .warn { background:#3a2a05; color:var(--warn); } .bad { background:#3a0d0d; color:var(--bad); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:12px; }
+  input, textarea { width:100%; background:var(--panel2); color:var(--text); border:1px solid #26314d; border-radius:8px; padding:10px; }
+  button.primary { background:var(--accent); color:#04121d; border:0; border-radius:8px; padding:10px 16px; cursor:pointer; font-weight:700; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  td, th { padding:8px; border-bottom:1px solid #1f2a44; text-align:right; }
+  [dir="ltr"] td, [dir="ltr"] th { text-align:left; }
+  #log { white-space:pre-wrap; font-family:ui-monospace, monospace; font-size:12px; color:var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <div><h1>OMEGA AI</h1><div class="sub" data-i18n="subtitle">نظام تشغيل ذكاء اصطناعي شخصي — مستقل · 0$ · عربي أولاً</div></div>
+  <div>
+    <span id="core-badge" class="pill warn">…</span>
+    <button class="primary" id="lang-btn" style="margin-inline-start:8px">English</button>
+  </div>
+</header>
+<nav id="nav"></nav>
+<main>
+  <section id="sec-overview" class="active"><div class="card"><h2 data-i18n="overview">نظرة عامة</h2><div id="overview-body" class="muted">…</div></div>
+    <div class="card"><h2 data-i18n="stats">إحصائيات</h2><div id="stats-body" class="muted">…</div></div></section>
+
+  <section id="sec-chat"><div class="card"><h2 data-i18n="chat">محادثة الذكاء الاصطناعي</h2>
+    <textarea id="objective" rows="3" placeholder="اكتب هدفك… مثال: ابحث عن مشروع مربح على الإنترنت، وابنِ له موقعًا"></textarea>
+    <p><button class="primary" id="run-btn" data-i18n="start">ابدأ المشروع</button>
+    <span id="run-msg" class="muted"></span></p>
+    <div class="muted" data-i18n="chatnote">التنفيذ الكامل يحتاج مفتاح OpenRouter المجاني في ملف .env (خطوتك أنت). بدون مفتاح، النظام يرفض بصراحة ولا يزيّف أي تنفيذ.</div></div></section>
+
+  <section id="sec-agents"><div class="card"><h2 data-i18n="agents">فريق الوكلاء</h2><div id="agents-body" class="grid">…</div></div></section>
+
+  <section id="sec-tasks"><div class="card"><h2 data-i18n="tasks">المهام</h2><div id="tasks-body" class="muted">لا مهام بعد — ابدأ مشروعًا من تبويب المحادثة. الحالات: معلّقة · تخطيط · قيد التنفيذ · بانتظار الموافقة · اختبار · مكتملة · فاشلة.</div></div></section>
+
+  <section id="sec-projects"><div class="card"><h2 data-i18n="projects">المشاريع</h2><div id="projects-body" class="muted">…</div></div></section>
+
+  <section id="sec-computer"><div class="card"><h2 data-i18n="computer">التحكم في الحاسوب</h2>
+    <p class="muted">العمليات الخضراء تلقائية (بحث، قراءة). الصفراء تحتاج تأكيدك (نشر، إيميل). الحمراء موافقة صريحة دائمًا (دفع، حذف، كلمات مرور). تكامل Desktop Commander يأتي في المرحلة 7 — على جهاز ويندوز.</p>
+    <p><button class="primary" id="gate-demo">اختبر بوابة الصلاحيات</button> <span id="gate-msg" class="muted"></span></p></div></section>
+
+  <section id="sec-research"><div class="card"><h2 data-i18n="research">مركز البحث</h2><div class="muted">محرك البحث في OMEGA يقرأ من قاعدة فرص الدخل وبحوث السوق الموجودة في <code>~/workspace/omega/</code> — نتائج موثّقة من المصدر الأصلي فقط.</div></div></section>
+
+  <section id="sec-memory"><div class="card"><h2 data-i18n="memory">الذاكرة</h2><div id="memory-body" class="muted">…</div></div></section>
+
+  <section id="sec-automations"><div class="card"><h2 data-i18n="automations">الأتمتة</h2><div class="muted">n8n غير مثبّت بعد — يأتي في المرحلة 7 على جهاز ويندوز. حاليًا: الجدولة تتم عبر مهام cron الموجودة.</div></div></section>
+
+  <section id="sec-integrations"><div class="card"><h2 data-i18n="integrations">التكاملات</h2><div id="integrations-body" class="muted">…</div></div></section>
+
+  <section id="sec-logs"><div class="card"><h2 data-i18n="logs">السجلات</h2><div id="log">…</div></div></section>
+
+  <section id="sec-settings"><div class="card"><h2 data-i18n="settings">الإعدادات</h2>
+    <p class="muted">المزوّد: OpenRouter (نماذج <code>:free</code>) عبر LiteLLM. المفتاح يُوضع في ملف <code>.env</code> فقط — لا يُكتب هنا أبدًا ولا يُحفظ في الكود.</p>
+    <label class="muted">Provider</label><input value="openrouter" readonly>
+    <label class="muted">Model (default)</label><input value="openrouter/free (auto)" readonly>
+    <p class="muted">اللغة: العربية (RTL) افتراضيًا — زر English أعلى الصفحة للتبديل.</p></div></section>
+</main>
+<script>
+const SECTIONS = [["overview","نظرة عامة","Overview"],["chat","محادثة الذكاء الاصطناعي","AI Chat"],["agents","فريق الوكلاء","Agent Team"],["tasks","المهام","Tasks"],["projects","المشاريع","Projects"],["computer","التحكم في الحاسوب","Computer Control"],["research","مركز البحث","Research Center"],["memory","الذاكرة","Memory"],["automations","الأتمتة","Automations"],["integrations","التكاملات","Integrations"],["logs","السجلات","Logs"],["settings","الإعدادات","Settings"]];
+const nav = document.getElementById('nav');
+SECTIONS.forEach(([id, ar, en], i) => {
+  const b = document.createElement('button');
+  b.textContent = document.documentElement.lang === 'ar' ? ar : en;
+  b.dataset.sec = id; b.dataset.ar = ar; b.dataset.en = en;
+  if (i === 0) b.classList.add('active');
+  b.onclick = () => {
+    document.querySelectorAll('nav button').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    document.querySelectorAll('main section').forEach(s => s.classList.remove('active'));
+    document.getElementById('sec-' + id).classList.add('active');
+  };
+  nav.appendChild(b);
+});
+let LANG = 'ar';
+const I18N = { subtitle: { ar: 'نظام تشغيل ذكاء اصطناعي شخصي — مستقل · 0$ · عربي أولاً', en: 'Personal AI operating system — autonomous · $0 · Arabic-first' } };
+document.getElementById('lang-btn').onclick = () => {
+  LANG = LANG === 'ar' ? 'en' : 'ar';
+  document.documentElement.lang = LANG;
+  document.documentElement.dir = LANG === 'ar' ? 'rtl' : 'ltr';
+  document.getElementById('lang-btn').textContent = LANG === 'ar' ? 'English' : 'العربية';
+  document.querySelectorAll('nav button').forEach(b => { b.textContent = LANG === 'ar' ? b.dataset.ar : b.dataset.en; });
+  document.querySelectorAll('[data-i18n]').forEach(el => { const k = el.dataset.i18n; if (I18N[k]) el.textContent = I18N[k][LANG]; });
+};
+// Hosted dashboard (Cloudflare Pages) talks to the bridge on Render:
+// open it as https://<pages-url>/?api=https://<render-url>
+// Local / Electron: no ?api= → same-origin fetch as before.
+const API_BASE = (new URLSearchParams(location.search).get('api') || '').replace(/\/$/, '');
+async function api(path, opts) {
+  // Inside Electron: window.omega (preload). In a plain browser: direct fetch to the bridge.
+  if (window.omega && path === '/status') { const r = await window.omega.getStatus(); return r.ok ? r.data : null; }
+  if (window.omega && path === '/agents') { const r = await window.omega.getAgents(); return r.ok ? r.data : null; }
+  const res = await fetch(API_BASE + path, opts);
+  return res.ok ? res.json() : null;
+}
+function logLine(s) { const el = document.getElementById('log'); el.textContent = (el.textContent === '…' ? '' : el.textContent + '\n') + s; }
+async function refresh() {
+  try {
+    const st = await api('/status');
+    if (!st) throw new Error('bridge unreachable — run: python3 bridge/omega_bridge.py');
+    const badge = document.getElementById('core-badge');
+    badge.textContent = st.core.supervisor_importable ? 'CORE ✓' : 'CORE — مفتاح ناقص';
+    badge.className = 'pill ' + (st.core.supervisor_importable ? 'ok' : 'warn');
+    document.getElementById('overview-body').textContent =
+      'OMEGA AI v' + st.version + ' · النواة: ' + (st.core.supervisor_importable ? 'مستوردة ✓' : 'تحتاج مفتاح OpenRouter') +
+      ' · الوكلاء: ' + st.agents.length + ' · الذاكرة: ' + st.core.memory_records + ' سجل · المشاريع: ' + st.core.projects.length;
+    document.getElementById('stats-body').innerHTML =
+      '<table><tr><td>الوكلاء</td><td>' + st.agents.length + '</td></tr><tr><td>سجلات الذاكرة</td><td>' + st.core.memory_records + '</td></tr><tr><td>مشاريع نشطة</td><td>' + st.core.projects.length + '</td></tr><tr><td>مساحة القرص الحرة (df)</td><td>' + (st.core.disk_free_gb || '?') + ' GB' + (API_BASE ? ' (المستضاف — القرص مؤقت)' : ' — لكن حصة btrfs المتاحة ~54MB (العائق لتثبيت Electron)') + '</td></tr></table>';
+    document.getElementById('agents-body').innerHTML = st.agents.map(a =>
+      '<div class="card"><h2>' + a.name_ar + ' <span class="muted">(' + a.name + ')</span></h2><p class="muted">' + a.role + '</p><span class="pill ' + (a.status === 'exists' ? 'ok' : a.status === 'missing' ? 'bad' : 'warn') + '">' + a.status + '</span></div>').join('');
+    document.getElementById('projects-body').textContent = st.core.projects.length
+      ? st.core.projects.map(p => p.name).join(' · ') : 'لا مشاريع بعد في مركز القيادة.';
+    document.getElementById('integrations-body').innerHTML =
+      '<table><tr><td>OMEGA (بحث الدخل)</td><td>مقروء ✓</td></tr><tr><td>MUSE factory</td><td>مقروء ✓</td></tr><tr><td>AWR / Digital Studio</td><td>مقروء ✓</td></tr><tr><td>ORIGIN</td><td><span class="pill bad">غير موجود</span></td></tr><tr><td>Desktop Commander</td><td><span class="pill warn">المرحلة 7 — ويندوز</span></td></tr><tr><td>n8n</td><td><span class="pill warn">المرحلة 7 — ويندوز</span></td></tr></table>';
+    const mem = await api('/memory');
+    if (mem) document.getElementById('memory-body').textContent = 'قاعدة SQLite: ' + mem.db_path + ' · ' + mem.count + ' سجل · آخر تحديث: ' + (mem.latest || '—');
+    logLine(new Date().toLocaleTimeString() + ' — status OK · core importable=' + st.core.supervisor_importable);
+  } catch (e) {
+    document.getElementById('overview-body').textContent = 'الجسر غير متصل: ' + e.message;
+    logLine(new Date().toLocaleTimeString() + ' — ERROR ' + e.message);
+  }
+}
+document.getElementById('run-btn').onclick = async () => {
+  const msg = document.getElementById('run-msg');
+  msg.textContent = 'التنفيذ الكامل في المرحلة 4 — اليوم التنفيذ يتم من تطبيق Streamlit في مركز القيادة (يحتاج مفتاح OpenRouter المجاني).';
+  logLine(new Date().toLocaleTimeString() + ' — run requested (Phase 4; Streamlit path today)');
+};
+document.getElementById('gate-demo').onclick = async () => {
+  const out = document.getElementById('gate-msg');
+  if (window.omega) { const r = await window.omega.gate('delete'); out.textContent = 'delete → ' + JSON.stringify(r); }
+  else out.textContent = 'delete → RED — موافقة صريحة مطلوبة دائمًا (داخل Electron تُفرض عبر main.js).';
+};
+refresh();
+setInterval(refresh, 30000);
+</script>
+</body>
+</html>
